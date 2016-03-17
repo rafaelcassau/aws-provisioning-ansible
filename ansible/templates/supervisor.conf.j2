@@ -1,5 +1,5 @@
 [program:{{ project_name }}]
-command=/home/{{ user }}/projects/{{ project_name }}/start.sh
+command=sudo /home/{{ user }}/projects/{{ project_name }}/start.sh
 user=ubuntu
 stdout_logfile=/home/{{ user }}/projects/{{ project_name }}/logs/supervisor.log
 redirect_stderr=true

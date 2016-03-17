@@ -26,11 +26,9 @@
 
   - name: Install nginx configuration file.
     template: src=templates/nginx.conf.j2 dest=/home/{{ user }}/projects/{{ project_name }}/nginx.conf
-    notify: restart nginx
 
   - name: Install gunicorn configuration file.
-    template: src=templates/start.sh.j2 dest=/home/{{ user }}/projects/{{ project_name }}/start.sh mode=755
-    notify: restart supervisor
+    template: src=templates/start.sh.j2 dest=/home/{{ user }}/projects/{{ project_name }}/start.sh mode=777
 
   - name: Install supervisor configuration file.
     template: src=templates/supervisor.conf.j2 dest=/home/{{ user }}/projects/{{ project_name }}/supervisor.conf
