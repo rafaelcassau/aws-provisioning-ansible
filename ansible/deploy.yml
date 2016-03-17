@@ -1,16 +1,20 @@
 ---
-- hosts: servers
+- hosts: itreta
   vars_files:
     - vars.yml
   sudo: true
-  sudo_user: "{{ user }}"
 
   tasks:
   - name: Pull sources from the repository.
-    git: repo={{ project_repo }} dest=/home/{{ user }}/projects/{{ project_name }}/ version={{ branch }}
+    git: repo={{ project_repo }} dest=/home/{{ user }}/projects/{{ project_name }}/code/ version=master
 
   - name: Upgrade the virtualenv.
-    pip: requirements=/home/{{ user }}/projects/{{ project_name }}/requirements.txt virtualenv=/home/{{ user }}/virtualenvs/{{ project_name }}
+    pip: requirements=/home/{{ user }}/projects/{{ project_name }}/code/requirements.txt virtualenv=/home/{{ user }}/virtualenvs/{{ project_name }}
+    notify: restart supervisor
 
   - name: Sync Django Database.
-    shell: /home/{{ user }}/projects/{{ project_name }}/manage.py syncdb --migrate --noinput
+    shell: sudo /home/{{ user }}/virtualenvs/{{ project_name }}/bin/python /home/{{ user }}/projects/{{ project_name }}/code/manage.py migrate
+    notify: restart nginx
+
+  handlers:
+    - include: handlers.yml

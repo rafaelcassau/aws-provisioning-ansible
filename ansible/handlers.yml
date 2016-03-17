@@ -5,4 +5,4 @@
 
 - name: restart supervisor
   service: name=supervisor state=restarted
-  sudo_user: true
+  sudo: true
