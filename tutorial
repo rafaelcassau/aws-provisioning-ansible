@@ -1,0 +1,59 @@
+----------------------------------------------
+Conectar na instancia da AWS
+----------------------------------------------
+Não pode perder chave privada
+
+1 - Dar permissão na chave privada "rafaelcassau.pem"    -> [ chmod 400 rafaelcassau.pem ]
+2 - IP publico de acesso a instancia                     -> [ 52.89.60.124 ]
+3 - Executar o comando SSH no diretório da chave privada -> [ ssh -i "rafaelcassau.pem" ubuntu@52.89.60.124 ]
+
+----------------------------------------------
+Ansible on AWS
+----------------------------------------------
+	Create a small instance
+	Create a ssh pair key (pem file, etc)
+	Test SSH connection
+
+	Install ansible (local)
+		sudo apt-get install ansible or pip install ansible
+		cd /etc/ansible
+		cp hosts hosts.orig
+		touch ec2.ini ec2.py
+		copy files: https://aws.amazon.com/pt/blogs/apn/getting-started-with-ansible-and-dynamic-amazon-ec2-inventory-management/
+
+	export AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+	export AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+	export ANSIBLE_HOSTS=/etc/ansible/ec2.py
+	export EC2_INI_PATH=/etc/ansible/ec2.ini
+
+	ssh-agent bash
+	sudo chmod 0600 ~/.ssh/yourpem.pem
+	ssh-add ~/.ssh/yourpem.pem
+
+	chmod +x /etc/ansible/ec2.py
+	/etc/ansible/ec2.py --list
+
+	playbook
+	---
+
+	- hosts: webservers
+	  vars:
+	    - welcome_message: "Top das galaxia"
+	  tasks:
+	    - name: Installs nginx web server
+	      apt: pkg=nginx state=installed update_cache=true
+	      notify:
+	        - start nginx
+	    - name: Copy index.html file
+	      template: src=index.html dest=/usr/share/nginx/html/index.html
+	
+
+	ansible-playbook -i /etc/ansible/hosts -s -u ubuntu environment.yml
+	ansible-playbook -i /etc/ansible/hosts -s -u ubuntu deploy.yml
+
+----------------------------------------------
+referencias
+----------------------------------------------
+	https://www.youtube.com/watch?v=xMHVvHZ-Zn4
+	https://aws.amazon.com/pt/blogs/apn/getting-started-with-ansible-and-dynamic-amazon-ec2-inventory-management/
+	https://www.digitalocean.com/community/tutorials/how-to-create-ansible-playbooks-to-automate-system-configuration-on-ubuntu

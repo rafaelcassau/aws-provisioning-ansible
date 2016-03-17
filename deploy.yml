@@ -1,0 +1,12 @@
+---
+- hosts: itreta
+  tasks:
+    - name: Update Project
+      
+    - name: Stop Gunicorn
+      
+      name: Run Migrate
+
+    - name: Collect static files
+
+    - name: Run Project
