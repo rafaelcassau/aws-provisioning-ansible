@@ -16,9 +16,9 @@
     file: state=touch path=/home/{{ user }}/projects/{{ project_name }}/logs/{{ item }}
     with_items: "{{ logfiles }}"
 
-  # - name: Install required system packages.
-  #   apt: pkg={{ item }} state=installed update-cache=yes
-  #   with_items: "{{ system_packages }}"
+  - name: Install required system packages.
+    apt: pkg={{ item }} state=installed update-cache=yes
+    with_items: "{{ system_packages }}"
 
   - name: Install required Python packages.
     pip: name={{ item }}
@@ -34,5 +34,3 @@
 
   - name: Install supervisor configuration file.
     template: src=templates/supervisor.conf.j2 dest=/home/{{ user }}/projects/{{ project_name }}/supervisor.conf
-
-- include: deploy.yml
