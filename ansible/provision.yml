@@ -29,7 +29,7 @@
     notify: restart nginx
 
   - name: Install gunicorn configuration file.
-    template: src=templates/start.sh.j2 dest=/home/{{ user }}/projects/{{ project_name }}/start.sh
+    template: src=templates/start.sh.j2 dest=/home/{{ user }}/projects/{{ project_name }}/start.sh mode=755
     notify: restart supervisor
 
   - name: Install supervisor configuration file.
