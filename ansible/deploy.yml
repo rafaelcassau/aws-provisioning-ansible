@@ -10,11 +10,13 @@
 
   - name: Upgrade the virtualenv.
     pip: requirements=/home/{{ user }}/projects/{{ project_name }}/code/requirements.txt virtualenv=/home/{{ user }}/virtualenvs/{{ project_name }}
-    notify: restart supervisor
+
 
   - name: Sync Django Database.
     shell: sudo /home/{{ user }}/virtualenvs/{{ project_name }}/bin/python /home/{{ user }}/projects/{{ project_name }}/code/manage.py migrate
-    notify: restart nginx
+    notify:
+      - restart nginx
+      - restart supervisor
 
   handlers:
     - include: handlers.yml
