@@ -11,6 +11,8 @@
   - name: Upgrade the virtualenv.
     pip: requirements=/home/{{ user }}/projects/{{ project_name }}/code/requirements.txt virtualenv=/home/{{ user }}/virtualenvs/{{ project_name }}
 
+  - name: Collect Static.
+    shell: sudo /home/{{ user }}/virtualenvs/{{ project_name }}/bin/python /home/{{ user }}/projects/{{ project_name }}/code/manage.py collectstatic
 
   - name: Sync Django Database.
     shell: sudo /home/{{ user }}/virtualenvs/{{ project_name }}/bin/python /home/{{ user }}/projects/{{ project_name }}/code/manage.py migrate
