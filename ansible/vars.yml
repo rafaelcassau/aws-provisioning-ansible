@@ -1,20 +1,29 @@
 ---
-project_name: myproject
-project_root: /var/projects/myproject
-project_repo: git@bitbucket.org:myuser/myproject.git
+user: ubuntu
+project_name: itreta
+project_dns: ec2-52-89-60-124.us-west-2.compute.amazonaws.com
+project_port: 8000
+project_repo: https://github.com/rafaelcassau/itreta.git
+
 system_packages:
   - build-essential
-  - git
   - libevent-dev
   - nginx
-  - postgresql
-  - postgresql-server-dev-all
+  - git
+  - mysql-server
+  - supervisor
   - python-dev
   - python-setuptools
-  - redis-server
   - postfix
 python_packages:
   - pip
   - virtualenv
-initfiles:
-  - gunicorn
+logfiles:
+  - supervisor.log
+  - gunicorn.log
+  - access.log
+  - error.log
+folders:
+  - logs
+  - media
+  - static

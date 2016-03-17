@@ -1,0 +1,42 @@
+---
+- hosts: itreta
+  vars_files:
+    - vars.yml
+  sudo: true
+
+  tasks:
+  - name: Create the project root.
+    file: state=directory path=/home/{{ user }}/projects/{{ project_name }}
+
+  - name: Create a project structure
+    file: state=directory path=/home/{{ user }}/projects/{{ project_name }}/{{ item }}/
+    with_items: "{{ folders }}"
+
+  - name: Create log files.
+    file: state=directory path=/home/{{ user }}/projects/{{ project_name }}/logs/{{ item }}
+    with_items: "{{ logfiles }}"
+
+  - name: Install required system packages.
+    apt: pkg={{ item }} state=installed update-cache=yes
+    with_items: "{{ system_packages }}"
+
+  - name: Install required Python packages.
+    pip: name={{ item }}
+    with_items: "{{ python_packages }}"
+
+  - name: Install nginx configuration file.
+    template: src=templates/nginx.conf.j2 dest=/home/{{ user }}/projects/{{ project_name }}/nginx.conf
+    notify: restart nginx
+
+  - name: Install gunicorn configuration file.
+    template: src=templates/start.sh.j2 dest=/home/{{ user }}/projects/{{ project_name }}/start.sh
+    notify: restart supervisor
+
+  - name: Install supervisor configuration file.
+    template: src=templates/supervisor.conf.j2 dest=/home/{{ user }}/projects/{{ project_name }}/supervisor.conf
+    notify: restart supervisor
+
+  handlers:
+    - include: handlers.yml
+
+- include: deploy.yml

@@ -1,0 +1,29 @@
+upstream {{ project_dns }} {
+    server 127.0.0.1:{{ project_port }};
+}
+
+server {
+    listen 80;
+    server_name {{ project_dns }};
+    client_max_body_size 50M;
+
+    access_log /home/{{ user }}/projects/{{ project_name }}/logs/access.log;
+    error_log /home/{{ user }}/projects/{{ project_name }}/logs/error.log;
+
+    location /static/ {
+        alias /home/{{ user }}/projects/{{ project_name }}/static/;
+    }
+    location /media/ {
+        alias /home/{{ user }}/projects/{{ project_name }}/media/;
+    }
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass {{ project_dns }};
+            break;
+        }
+    }
+}

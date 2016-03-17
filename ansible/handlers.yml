@@ -1,0 +1,8 @@
+---
+- name: restart nginx
+  service: name=nginx state=restarted
+  sudo: true
+
+- name: restart supervisor
+  service: name=supervisor state=restarted
+  sudo_user: true
