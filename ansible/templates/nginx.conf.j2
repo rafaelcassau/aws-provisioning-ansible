@@ -3,7 +3,7 @@ upstream {{ project_dns }} {
 }
 
 server {
-    listen 81;
+    listen 80;
     server_name {{ project_dns }};
     client_max_body_size 50M;
 
